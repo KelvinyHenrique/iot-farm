@@ -1,0 +1,6 @@
+[submodule "components/esp_cron_2"]
+	path = components/esp_cron_2
+	url = git@github.com:KelvinyHenrique/esp_cron.git
+[submodule "components/esp_cron"]
+	path = components/esp_cron
+	url = git@github.com:KelvinyHenrique/esp_cron.git
