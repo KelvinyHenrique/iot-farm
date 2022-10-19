@@ -1,0 +1,3 @@
+[submodule "components/--force"]
+	path = components/--force
+	url = git@github.com:KelvinyHenrique/esp_cron.git
