@@ -37,7 +37,21 @@ void app_main(void)
     tzset();
 
     cron_job *jobs[2];
-    // jobs[0] = cron_job_create("* * * * * *", test_cron_job_sample_callback, (void *)0);
-    jobs[1] = cron_job_create("0 */2 * ? * *", test_cron_job_sample_callback, (void *)10000);
+  //  jobs[0] = cron_job_create("* * * * * *", test_cron_job_sample_callback, (void *)0);
+    jobs[1] = cron_job_create("* 41 16 * * 1-5", test_cron_job_sample_callback, (void *)10000);
     cron_start();
+
+// log time
+    time_t now;
+    struct tm timeinfo;
+    char strftime_buf[64];
+
+    while (1)
+    {
+        time(&now);
+        localtime_r(&now, &timeinfo);
+        strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
+        ESP_LOGI(TAG_FIRM, "The current date/time in São Paulo is: %s", strftime_buf);
+        vTaskDelay(10000 / portTICK_PERIOD_MS);
+    }
 }
