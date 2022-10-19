@@ -5,6 +5,8 @@
         ".prettierrc": "json",
         "*.tsx": "typescriptreact",
         "freertos.h": "c",
-        "wifi_manager.h": "c"
+        "wifi_manager.h": "c",
+        "cron.h": "c",
+        "string.h": "c"
     }
 }
