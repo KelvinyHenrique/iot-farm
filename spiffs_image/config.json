@@ -2,7 +2,7 @@
     "deviceId": "",
     "deviceName": "",
     "deviceType": "",
-    "attributes": [
+    "commands": [
         {
             "name": "switch",
             "defaultValue": "off",
@@ -34,6 +34,42 @@
                 }
             ],
             "lastState": "off"
+        }
+    ],
+    "connectvity": [
+        {
+            "name": "wifi",
+            "type": "wifi",
+            "mode": "AP",
+            "ip": "",
+            "mac": "",
+            "ssid": "",
+            "password": "",
+            "signal": 0,
+            "lastConnected": 0,
+            "status": "offline"
+        }
+    ],
+    "services": [
+        {
+            "name": "mqtt",
+            "type": "mqtt",
+            "host": "",
+            "port": 0,
+            "username": "",
+            "password": "",
+            "topic": "",
+            "status": "offline"
+        },
+        {
+            "name": "http",
+            "type": "http",
+            "host": "",
+            "port": 0,
+            "username": "",
+            "password": "",
+            "topic": "",
+            "status": "offline"
         }
     ]
     
