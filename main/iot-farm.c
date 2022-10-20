@@ -8,6 +8,7 @@
 #include "time.h"
 #include "esp_sntp.h"
 #include "cron.h"
+#include "filesystem.h"
 
 static const char *TAG_FIRM = "iot-farm";
 
@@ -45,7 +46,7 @@ void app_main(void)
     time_t now;
     struct tm timeinfo;
     char strftime_buf[64];
-
+    filesystem_init();
     while (1)
     {
         time(&now);

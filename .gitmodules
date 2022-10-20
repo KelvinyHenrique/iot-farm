@@ -4,3 +4,6 @@
 [submodule "components/esp_cron"]
 	path = components/esp_cron
 	url = git@github.com:KelvinyHenrique/esp_cron.git
+[submodule "components/filesystem"]
+	path = components/filesystem
+	url = git@github.com:KelvinyHenrique/filesystem.git
