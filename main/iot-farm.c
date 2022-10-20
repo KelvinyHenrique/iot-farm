@@ -47,6 +47,7 @@ void app_main(void)
     struct tm timeinfo;
     char strftime_buf[64];
     filesystem_init();
+    getFiles("/spiffs");
     while (1)
     {
         time(&now);

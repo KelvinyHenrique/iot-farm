@@ -1,0 +1,40 @@
+{
+    "deviceId": "",
+    "deviceName": "",
+    "deviceType": "",
+    "attributes": [
+        {
+            "name": "switch",
+            "defaultValue": "off",
+            "options": [
+                "on",
+                "off"
+            ],
+            "lastState": "off"
+        },
+        {
+            "name": "schedule",
+            "defaultValue": "off",
+            "options": [
+                "oneTime",
+                "daily",
+                "weekly",
+                "monthly",
+                "yearly"
+            ],
+            "schedulers": [
+                {
+                    "name": "oneTime",
+                    "type": "oneTime",
+                    "unixTime": 0,
+                    "value": "on",
+                    "revertValueOnFinish": "off",
+                    "delayToRevert": 0,
+                    "cronExpression": ""
+                }
+            ],
+            "lastState": "off"
+        }
+    ]
+    
+}
