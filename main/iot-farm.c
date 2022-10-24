@@ -20,6 +20,7 @@ void test_cron_job_sample_callback(cron_job *job)
 
 void app_main(void)
 {
+    filesystem_init();
     connect();
     //################################ Time #################################
 
@@ -46,8 +47,6 @@ void app_main(void)
     time_t now;
     struct tm timeinfo;
     char strftime_buf[64];
-    filesystem_init();
-    getFiles("/spiffs");
     while (1)
     {
         time(&now);

@@ -16,6 +16,8 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "wifi_manager.h"
+#include "filesystem.h"
+#include "cJSON.h"
 
 #include "lwip/err.h"
 #include "lwip/sys.h"
@@ -90,7 +92,7 @@ static void event_handler(void *arg, esp_event_base_t event_base,
     }
 }
 
-void wifi_init_sta(void)
+void wifi_init_sta(char *ssid, char *password)
 {
     s_wifi_event_group = xEventGroupCreate();
 
@@ -115,19 +117,21 @@ void wifi_init_sta(void)
                                                         NULL,
                                                         &instance_got_ip));
 
-    wifi_config_t wifi_config = {
+  /*   wifi_config_t wifi_config = {
         .sta = {
-            .ssid = EXAMPLE_ESP_WIFI_SSID,
-            .password = EXAMPLE_ESP_WIFI_PASS,
-            /* Authmode threshold resets to WPA2 as default if password matches WPA2 standards (pasword len => 8).
-             * If you want to connect the device to deprecated WEP/WPA networks, Please set the threshold value
-             * to WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK and set the password with length and format matching to
-             * WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK standards.
-             */
+            .ssid = ssid,
+            .password = password,
             .threshold.authmode = ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD,
             .sae_pwe_h2e = WPA3_SAE_PWE_BOTH,
         },
-    };
+    }; */
+
+    wifi_config_t  wifi_config = {0};
+      strlcpy((char *) wifi_config.sta.ssid, ssid, sizeof(wifi_config.sta.ssid));
+    if (password) {
+        strlcpy((char *) wifi_config.sta.password, password, sizeof(wifi_config.sta.password));
+    }
+
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
     ESP_ERROR_CHECK(esp_wifi_start());
@@ -146,18 +150,71 @@ void wifi_init_sta(void)
      * happened. */
     if (bits & WIFI_CONNECTED_BIT)
     {
-        ESP_LOGI(TAG, "connected to ap SSID:%s password:%s",
-                 EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS);
+        ESP_LOGI(TAG, "connected to ap SSID:%s password:%s", ssid, password);
     }
     else if (bits & WIFI_FAIL_BIT)
     {
-        ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s",
-                 EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS);
+        ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s", ssid, password);
     }
     else
     {
         ESP_LOGE(TAG, "UNEXPECTED EVENT");
     }
+}
+
+void JSON_Print(cJSON *element) {
+	if (element->type == cJSON_Invalid) ESP_LOGI(TAG, "cJSON_Invalid");
+	if (element->type == cJSON_False) ESP_LOGI(TAG, "cJSON_False");
+	if (element->type == cJSON_True) ESP_LOGI(TAG, "cJSON_True");
+	if (element->type == cJSON_NULL) ESP_LOGI(TAG, "cJSON_NULL");
+	if (element->type == cJSON_Number) ESP_LOGI(TAG, "cJSON_Number int=%d double=%f", element->valueint, element->valuedouble);
+	if (element->type == cJSON_String) ESP_LOGI(TAG, "cJSON_String string=%s", element->valuestring);
+	if (element->type == cJSON_Array) ESP_LOGI(TAG, "cJSON_Array");
+	if (element->type == cJSON_Object) {
+		ESP_LOGI(TAG, "cJSON_Object");
+		cJSON *child_element = NULL;
+		cJSON_ArrayForEach(child_element, element) {
+			JSON_Print(child_element);
+		}
+	}
+	if (element->type == cJSON_Raw) ESP_LOGI(TAG, "cJSON_Raw");
+}
+void get_wifi_config(void)
+{
+    char *wificonfig = readFile("/spiffs/wifi_config.json");
+    if (wificonfig == NULL)
+    {
+        ESP_LOGE(TAG, "Failed to read config file");
+        return;
+    }
+   /*  ESP_LOGI(TAG, "config: %s", wificonfig); */
+
+    cJSON *wifi_config = cJSON_Parse(wificonfig);
+    if (wifi_config == NULL)
+    {
+        ESP_LOGE(TAG, "Failed to parse config file");
+        return;
+    }
+
+    cJSON *ssid = cJSON_GetObjectItem(wifi_config, "ssid");
+    if (ssid == NULL)
+    {
+        ESP_LOGE(TAG, "Failed to get ssid");
+        return;
+    }
+    cJSON *password = cJSON_GetObjectItem(wifi_config, "password");
+    if (password == NULL)
+    {
+        ESP_LOGE(TAG, "Failed to get password");
+        return;
+    }
+
+    ESP_LOGI(TAG, "ssid: %s", ssid->valuestring);
+    ESP_LOGI(TAG, "password: %s", password->valuestring);
+
+
+    wifi_init_sta(ssid->valuestring, password->valuestring);
+
 }
 
 void connect(void)
@@ -171,6 +228,7 @@ void connect(void)
     }
     ESP_ERROR_CHECK(ret);
 
-    ESP_LOGI(TAG, "ESP_WIFI_MODE_STA");
-    wifi_init_sta();
+    get_wifi_config();
 }
+
+

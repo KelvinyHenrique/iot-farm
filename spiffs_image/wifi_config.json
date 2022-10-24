@@ -1,0 +1,11 @@
+{
+    "ssid": "SIGNET_ROOT",
+    "password": "48263590+L",
+    "wifi_mode": "AP",
+    "bssid": "00:11:22:33:44:55",
+    "channel": 1,
+    "ip": "",
+    "gateway": "",
+    "enabled": true,
+    "connection_status": "WL_CONNECTED"
+}

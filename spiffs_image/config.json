@@ -1,5 +1,5 @@
 {
-    "deviceId": "",
+    "deviceId": "dsfdsdsdksdjk",
     "deviceName": "",
     "deviceType": "",
     "commands": [
@@ -36,16 +36,26 @@
             "lastState": "off"
         }
     ],
-    "connectvity": [
+    "connectivity": [
         {
             "name": "wifi",
             "type": "wifi",
             "mode": "AP",
             "ip": "",
             "mac": "",
-            "ssid": "",
-            "password": "",
+            "ssid": "ESP32",
+            "password": "12345678",
             "signal": 0,
+            "lastConnected": 0,
+            "status": "offline"
+        },
+        {
+            "name": "mqtt",
+            "type": "mqtt",
+            "ip": "",
+            "port": 0,
+            "username": "",
+            "password": "",
             "lastConnected": 0,
             "status": "offline"
         }
@@ -59,7 +69,8 @@
             "username": "",
             "password": "",
             "topic": "",
-            "status": "offline"
+            "status": "offline",
+            "enabled": false
         },
         {
             "name": "http",
@@ -69,7 +80,8 @@
             "username": "",
             "password": "",
             "topic": "",
-            "status": "offline"
+            "status": "offline",
+            "enabled": false
         }
     ]
     
