@@ -9,6 +9,10 @@
         "cron.h": "c",
         "string.h": "c",
         "dirent.h": "c",
-        "cjson.h": "c"
+        "cjson.h": "c",
+        "esp_event.h": "c",
+        "dns.h": "c",
+        "esp_log.h": "c",
+        "*.tcc": "c"
     }
 }
