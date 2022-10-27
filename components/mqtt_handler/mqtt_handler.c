@@ -30,7 +30,7 @@
 #include "mqtt_handler.h"
 
 static const char *MQTT_TAG = "MQTT_EXAMPLE";
-
+ esp_mqtt_client_handle_t client = NULL;
 
 static void log_error_if_nonzero(const char *message, int error_code)
 {
@@ -53,12 +53,12 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 {
     ESP_LOGD(MQTT_TAG, "Event dispatched from event loop base=%s, event_id=%d", base, event_id);
     esp_mqtt_event_handle_t event = event_data;
-    esp_mqtt_client_handle_t client = event->client;
+    client = event->client;
     int msg_id;
     switch ((esp_mqtt_event_id_t)event_id) {
     case MQTT_EVENT_CONNECTED:
         ESP_LOGI(MQTT_TAG, "MQTT_EVENT_CONNECTED");
-        msg_id = esp_mqtt_client_publish(client, "/topic/qos1", "data_3", 0, 1, 0);
+        msg_id = mqtt_publish("/topic/qos1", "data_3", 0, 1, 0);
         ESP_LOGI(MQTT_TAG, "sent publish successful, msg_id=%d", msg_id);
 
         msg_id = esp_mqtt_client_subscribe(client, "/topic/qos0", 0);
@@ -112,7 +112,7 @@ static void mqtt_app_start(void)
         .broker.address.uri = "mqtt://broker.emqx.io",
     };
 
-    esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);
+    client = esp_mqtt_client_init(&mqtt_cfg);
     /* The last argument may be used to pass data to the event handler, in this example mqtt_event_handler */
     esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
     esp_mqtt_client_start(client);
@@ -125,9 +125,31 @@ void mqtt_start(void)
     ESP_LOGI(MQTT_TAG, "[MQTT] IDF version: %s", esp_get_idf_version());
 
 
-    ESP_ERROR_CHECK(nvs_flash_init());
-    ESP_ERROR_CHECK(esp_netif_init());
-
-
     mqtt_app_start();
+}
+
+int mqtt_publish(const char *topic, const char *data, int len, int qos, int retain) {
+    return esp_mqtt_client_publish(client, topic, data, len, qos, retain);
+}
+
+int mqtt_subscribe(const char *topic, int qos) {
+    return esp_mqtt_client_subscribe(client, topic, qos);
+}
+
+int mqtt_unsubscribe(const char *topic) {
+    return esp_mqtt_client_unsubscribe(client, topic);
+}
+
+void mqtt_stop(void) {
+    esp_mqtt_client_stop(client);
+}
+
+void mqtt_destroy(void) {
+    esp_mqtt_client_destroy(client);
+}
+
+void mqtt_restart(void) {
+    mqtt_stop();
+    mqtt_destroy();
+    mqtt_start();
 }

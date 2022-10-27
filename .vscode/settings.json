@@ -13,6 +13,10 @@
         "esp_event.h": "c",
         "dns.h": "c",
         "esp_log.h": "c",
-        "*.tcc": "c"
+        "*.tcc": "c",
+        "mqtt_handler.h": "c",
+        "filesystem.h": "c",
+        "esp_sntp.h": "c",
+        "stdlib.h": "c"
     }
 }
