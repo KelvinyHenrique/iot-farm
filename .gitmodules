@@ -7,3 +7,6 @@
 [submodule "components/filesystem"]
 	path = components/filesystem
 	url = git@github.com:KelvinyHenrique/filesystem.git
+[submodule "components/mqtt_red"]
+	path = components/mqtt_red
+	url = git@github.com:KelvinyHenrique/mqtt_red.git
