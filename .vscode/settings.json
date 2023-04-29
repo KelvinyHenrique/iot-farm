@@ -17,6 +17,10 @@
         "mqtt_handler.h": "c",
         "filesystem.h": "c",
         "esp_sntp.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "mqtt_client.h": "c",
+        "esp_rmaker_utils.h": "c",
+        "esp_rmaker_mqtt.h": "c",
+        "type_traits": "c"
     }
 }

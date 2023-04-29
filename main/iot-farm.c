@@ -9,7 +9,7 @@
 #include "esp_sntp.h"
 #include "cron.h"
 #include "filesystem.h"
-#include "mqtt_red.h"
+#include "esp_rmaker_mqtt.h"
 
 static const char *TAG_FIRM = "iot-farm";
 
@@ -23,7 +23,11 @@ void app_main(void)
 {
     filesystem_init();
     connect();
-    mqtt_start();
+
+    // ################################ MQTT #################################
+    esp_rmaker_mqtt_init(esp_rmaker_mqtt_get_conn_params());
+    esp_rmaker_mqtt_connect();
+
     // ################################ Time #################################
 
     ESP_LOGI(TAG_FIRM, "Setting clock...");
